@@ -1,0 +1,698 @@
+/* BMW Motorrad type family */
+@font-face { font-family: 'BMWMotorrad'; src: url('fonts/BMWMotorrad-Light.ttf') format('truetype'); font-weight: 300; font-style: normal; font-display: swap; }
+@font-face { font-family: 'BMWMotorrad'; src: url('fonts/BMWMotorrad-Regular.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'BMWMotorrad'; src: url('fonts/BMWMotorrad-Italic.ttf') format('truetype'); font-weight: 400; font-style: italic; font-display: swap; }
+@font-face { font-family: 'BMWMotorrad'; src: url('fonts/BMWMotorrad-Bold.ttf') format('truetype'); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: 'BMWMotorrad'; src: url('fonts/BMWMotorrad-BoldItalic.ttf') format('truetype'); font-weight: 700; font-style: italic; font-display: swap; }
+@font-face { font-family: 'BMWMotorrad'; src: url('fonts/BMWMotorrad-Heavy.ttf') format('truetype'); font-weight: 900; font-style: normal; font-display: swap; }
+@font-face { font-family: 'BMWMotorrad'; src: url('fonts/BMWMotorrad-HeavyItalic.ttf') format('truetype'); font-weight: 900; font-style: italic; font-display: swap; }
+
+:root {
+  /* Figma color tokens */
+  --anthracite: #262626;
+  --white: #FFFFFF;
+  --grey-1: #4D4D4D;
+  --grey-3: #8E8E8E;
+  --grey-5: #E6E6E6;
+  --grey-6: #F2F2F2;
+  --page-bg: #f5f6f8;
+  --map-bg: #151515;
+  --map-fill: #1A2A35;
+  --map-hover: #2A4055;
+  --map-selected: #0062FF;
+  --motorrad-blue: #0062FF;
+  --header-h: 84px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: "BMWMotorrad", "Helvetica Neue", -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; background: var(--page-bg); color: var(--anthracite); -webkit-font-smoothing: antialiased; }
+
+/* ═══════════════════════════════════════════════════════════
+   HEADER — white, 84px, with menu / account / search on left,
+   "NEWSLETTER COLOMBIA" centered, BMW Motorrad logo right
+═══════════════════════════════════════════════════════════ */
+.header {
+  background: var(--white);
+  border-bottom: 1px solid var(--anthracite);
+  height: var(--header-h);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 15px 32px;
+  position: sticky; top: 0; z-index: 100;
+}
+.header-left { display: flex; align-items: center; gap: 42px; }
+.header-menu-group { display: flex; align-items: center; gap: 18px; cursor: pointer; }
+.header-menu-group .icon { width: 24px; height: 24px; color: var(--anthracite); }
+.header-menu-group .label {
+  font-weight: 700; font-size: 22px; line-height: 1; color: var(--anthracite);
+  letter-spacing: 0;
+}
+.header-icon-btn {
+  background: none; border: none; padding: 0; cursor: pointer;
+  width: 24px; height: 24px; color: var(--anthracite);
+  display: flex; align-items: center; justify-content: center;
+}
+.header-icon-btn svg { width: 100%; height: 100%; }
+.header-center {
+  font-weight: 900; font-size: 25px; line-height: 25px;
+  color: var(--anthracite); text-align: center; letter-spacing: 0;
+}
+.header-logo { display: flex; align-items: center; gap: 19px; }
+.header-logo .bmw { width: 53.674px; height: 53.674px; flex-shrink: 0; }
+.header-logo .motorrad { width: 111.648px; height: 32.323px; }
+.header-logo svg, .header-logo img { display: block; width: 100%; height: 100%; }
+
+/* ═══════════════════════════════════════════════════════════
+   SCREENS
+═══════════════════════════════════════════════════════════ */
+.screen { display: none; }
+.screen.active { display: block; }
+
+/* ═══════════════════════════════════════════════════════════
+   SCREEN 1 — Hero + Map + Empty State + Footer
+═══════════════════════════════════════════════════════════ */
+
+/* HERO ─────────────────────────────────── */
+.hero {
+  background: var(--anthracite);
+  padding: 48px 32px 42px;
+  position: relative;
+  overflow: hidden;
+  color: var(--white);
+}
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: url('images/hero_image_desktop.png');
+  background-size: cover;
+  background-position: right center;
+  background-repeat: no-repeat;
+  opacity: 0.55;
+}
+/* Soft gradient so left-side text stays legible over the photo */
+.hero-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, var(--anthracite) 0%, rgba(38,38,38,0.85) 35%, rgba(38,38,38,0.2) 70%, rgba(38,38,38,0) 100%);
+}
+.hero-pin {
+  position: absolute; color: var(--white);
+  width: 24px; height: 24px;
+}
+.hero-pin.pin-1 { right: 360px; top: 42px; }
+.hero-pin.pin-2 { right: 230px; top: 148px; opacity: 0.7; }
+
+.breadcrumb {
+  position: absolute; top: 12px; left: 32px;
+  font-size: 10px; line-height: 1; display: flex; gap: 2px; align-items: center;
+}
+.breadcrumb .crumb-grey { color: var(--grey-3); }
+.breadcrumb .crumb-white { color: var(--white); }
+.breadcrumb a { color: var(--white); text-decoration: underline; text-decoration-style: solid; }
+
+.hero-content { position: relative; z-index: 2; max-width: 555px; }
+.hero-eyebrow {
+  font-size: 16px; line-height: 1; color: var(--white);
+  margin-bottom: 16px;
+}
+.hero-title {
+  font-weight: 900; font-size: 50px; line-height: 50px;
+  color: var(--white); text-transform: uppercase;
+  margin-bottom: 12px;
+  letter-spacing: 0;
+}
+.hero-desc {
+  font-size: 16px; line-height: 1.4; color: var(--white);
+}
+.hero-desc p + p { margin-top: 0; }
+
+/* MAIN CONTENT ─────────────────────────── */
+.main-content {
+  background: var(--grey-6);
+  padding: 42px 32px 120px;
+}
+.map-row {
+  display: flex; gap: 40px; align-items: stretch;
+  max-width: 1376px; margin: 0 auto;
+}
+.map-panel {
+  width: 672px; flex-shrink: 0;
+}
+.map-wrapper {
+  background: var(--map-bg);
+  border-left: 6px solid var(--motorrad-blue);
+  height: 680px;
+  position: relative;
+  overflow: hidden;
+}
+.map-wrapper svg.colombia-map {
+  position: absolute;
+  left: 109px; top: 39px;
+  width: 436px; height: 600px;
+}
+.map-wrapper .dept-path { fill: var(--map-fill); stroke: #2A4055; stroke-width: 0.5; cursor: default; transition: fill 0.18s; }
+.map-wrapper .dept-path.clickable { cursor: pointer; }
+.map-wrapper .dept-path.clickable:hover { fill: var(--map-hover); }
+.map-wrapper .dept-path.selected { fill: var(--motorrad-blue); }
+
+/* Pins overlaid on map */
+.map-pin {
+  position: absolute; width: 8px; height: 8px;
+  background: var(--motorrad-blue); border-radius: 50%;
+  box-shadow: 0 0 0 3px rgba(0, 98, 255, 0.3);
+  cursor: pointer;
+  z-index: 3;
+}
+.map-tooltip {
+  position: absolute;
+  background: var(--motorrad-blue);
+  color: var(--white);
+  font-size: 10px;
+  padding: 2px 8px;
+  z-index: 4;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.map-tooltip::after {
+  content: "";
+  position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%);
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid var(--motorrad-blue);
+}
+
+/* Empty state (right side) */
+.empty-state {
+  flex: 1; min-width: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 12px;
+  height: 420px;
+  align-self: center;
+  text-align: center;
+}
+.empty-state .pin-icon {
+  width: 60px; height: 60px;
+  color: var(--motorrad-blue);
+}
+.empty-state h2 {
+  font-weight: 900; font-size: 50px; line-height: 50px;
+  color: var(--anthracite);
+  max-width: 500px;
+}
+.empty-state .helper {
+  font-size: 16px; color: var(--anthracite); line-height: 1.4;
+}
+
+/* FOOTER ───────────────────────────────── */
+.footer-area {
+  position: relative;
+  height: 314px;
+  margin-top: -66px;
+}
+.footer-area .links-bg {
+  position: absolute;
+  top: 29px; left: 0; right: 0;
+  height: 209px;
+  background: var(--grey-5);
+  padding: 40px 420px 40px 736px;
+  display: flex; flex-direction: column;
+  gap: 42px;
+}
+.footer-links-row {
+  display: flex; gap: 32px;
+}
+.footer-links-col {
+  width: 203px;
+  display: flex; flex-direction: column; gap: 15px;
+}
+.footer-links-col h4 {
+  border-left: 3px solid var(--motorrad-blue);
+  padding-left: 8px;
+  font-weight: 700; font-size: 10px; line-height: 1; color: var(--anthracite);
+}
+.footer-links-col ul {
+  list-style: none; padding-left: 8px;
+  display: flex; flex-direction: column; gap: 15px;
+}
+.footer-links-col a {
+  font-size: 10px; color: var(--anthracite); text-decoration: none;
+}
+.footer-copyright {
+  font-size: 10px; color: var(--anthracite);
+}
+
+.newsletter-box {
+  position: absolute;
+  top: 0; left: 32px;
+  width: 555px;
+  background: var(--anthracite);
+  padding: 32px;
+  color: var(--white);
+  display: flex; flex-direction: column; gap: 32px;
+  z-index: 2;
+}
+.newsletter-box h3 {
+  font-weight: 900; font-size: 20px; line-height: 22px;
+  text-transform: uppercase;
+}
+.newsletter-form {
+  display: flex; height: 48px;
+  background: var(--white);
+}
+.newsletter-form input {
+  flex: 1; border: none; outline: none;
+  padding: 0 24px;
+  font-size: 16px; color: var(--anthracite);
+  background: transparent;
+}
+.newsletter-form input::placeholder { color: var(--grey-1); }
+.newsletter-form button {
+  width: 141px; height: 48px;
+  background: var(--motorrad-blue);
+  color: var(--white);
+  font-weight: 900; font-size: 16px;
+  border: none; cursor: pointer;
+  text-transform: uppercase;
+}
+.social-row { display: flex; gap: 24px; align-items: center; }
+.social-link {
+  display: flex; align-items: center; gap: 6px;
+  text-decoration: none; font-size: 16px;
+}
+.social-link.facebook { color: var(--motorrad-blue); }
+.social-link.youtube, .social-link.instagram { color: var(--white); }
+.social-link svg { width: 18px; height: 18px; }
+
+.make-life-row {
+  position: absolute;
+  bottom: 0; right: 32px;
+  background: var(--white);
+  padding: 24px 0;
+}
+.make-life {
+  display: flex; flex-direction: column; gap: 12px;
+  width: 169px;
+}
+.make-life .text {
+  font-weight: 900; font-size: 13px; line-height: 13px;
+  color: var(--anthracite); letter-spacing: 0.02em;
+  text-transform: uppercase; text-align: right;
+}
+.make-life .underline { height: 3px; background: #000; width: 100%; }
+
+/* ═══════════════════════════════════════════════════════════
+   SCREEN 2 — Department selected (Figma node 615:323)
+═══════════════════════════════════════════════════════════ */
+.s2-content {
+  flex: 1; min-width: 0;
+  display: flex; flex-direction: column;
+  gap: 24px;
+  max-width: 664px;
+}
+.s2-dept-header {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--grey-1);
+  width: 100%;
+}
+.s2-dept-name {
+  font-weight: 900; font-size: 50px; line-height: 50px;
+  color: var(--anthracite);
+}
+.s2-hotel-count {
+  background: var(--anthracite);
+  color: var(--white);
+  padding: 4px 16px;
+  border-radius: 120px;
+  font-size: 16px; line-height: 1;
+}
+.s2-antioquia-label {
+  /* Approximate position on the 436×600 map located at left:109, top:39 */
+  z-index: 5;
+}
+
+.hotel-cards {
+  display: flex; flex-direction: column;
+  gap: 24px;
+  width: 100%;
+}
+.hotel-card {
+  display: flex; flex-direction: column;
+  background: var(--white);
+  overflow: hidden;
+}
+.hotel-card-img {
+  width: 100%; height: 160px;
+  overflow: hidden;
+  position: relative;
+}
+.hotel-card-img img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.hotel-card-body {
+  padding: 12px 16px 16px;
+  display: flex; flex-direction: column;
+  gap: 24px;
+}
+.hotel-card-info {
+  display: flex; flex-direction: column;
+  gap: 12px;
+}
+.hotel-card-header {
+  display: flex; gap: 8px; align-items: flex-start;
+  width: 100%;
+}
+.hotel-card-name-loc {
+  flex: 1 1 0; min-width: 0;
+  display: flex; flex-direction: column;
+  gap: 6px;
+}
+.hotel-card-name {
+  font-weight: 900; font-size: 25px; line-height: 25px;
+  color: var(--anthracite);
+}
+.hotel-card-loc {
+  display: flex; gap: 2px; align-items: center;
+  font-size: 16px; line-height: 1;
+  color: #666;
+}
+.hotel-card-loc svg { width: 16px; height: 16px; color: #666; flex-shrink: 0; }
+.hotel-stars {
+  display: flex; gap: 2px; align-items: center;
+  flex-shrink: 0;
+}
+.hotel-stars .star { color: #FFB400; font-size: 22px; line-height: 1; }
+.hotel-tags {
+  display: flex; flex-wrap: wrap; gap: 10px;
+}
+.hotel-tag {
+  padding: 8px 16px;
+  border-radius: 50px;
+  font-size: 16px; line-height: 1;
+  border: 1px solid var(--grey-5);
+  background: var(--grey-6);
+  color: var(--grey-1);
+  white-space: nowrap;
+}
+.hotel-tag.exclusive {
+  background: rgba(6, 83, 182, 0.05);
+  border-color: rgba(6, 83, 182, 0.25);
+  color: #0653B6;
+}
+.hotel-card-cta {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+}
+.hotel-card-cta .btns {
+  display: flex; gap: 12px; align-items: center;
+}
+.btn-outline, .btn-primary {
+  height: 48px;
+  padding: 12px;
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 4px;
+  font-family: inherit;
+  font-weight: 900; font-size: 16px; line-height: 1;
+  cursor: pointer;
+  border: 1px solid var(--motorrad-blue);
+  background: var(--white);
+  color: var(--motorrad-blue);
+  text-decoration: none;
+}
+.btn-primary {
+  background: var(--motorrad-blue);
+  color: var(--white);
+}
+.btn-primary svg { width: 24px; height: 24px; }
+.hotel-card-footnote {
+  font-size: 12px; line-height: 1.2;
+  color: var(--grey-3);
+  text-align: right;
+}
+.hotel-card-footnote a { color: var(--motorrad-blue); text-decoration: underline; }
+
+.s2-back-btn {
+  align-self: flex-start;
+  width: 160px; height: 48px;
+  padding: 12px 18px 12px 12px;
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 4px;
+  font-family: inherit;
+  font-weight: 900; font-size: 16px; line-height: 1;
+  cursor: pointer;
+  border: 1px solid var(--motorrad-blue);
+  background: var(--white);
+  color: var(--motorrad-blue);
+}
+.s2-back-btn svg { width: 24px; height: 24px; }
+
+/* ═══════════════════════════════════════════════════════════
+   MOBILE TOGGLE — only visible on mobile viewports
+═══════════════════════════════════════════════════════════ */
+.mobile-toggle { display: none; }
+.mobile-only { display: none; }
+.mobile-footer-copy, .mobile-footer-makelife { display: none; }
+#screenMobileList { display: none; } /* hidden by default; shown only in mobile via .active */
+@media (min-width: 768px) {
+  #screenMobileList { display: none !important; } /* never show on desktop */
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MOBILE BREAKPOINT — Screen 1 (Figma node 656:210)
+═══════════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+  .desktop-only { display: none !important; }
+  .mobile-only { display: block; }
+
+  /* HEADER — 84px white, menu icon + 2-line newsletter title + small BMW logo */
+  .header {
+    gap: 30px;
+    padding: 25px 16px;
+    justify-content: flex-start;
+  }
+  .header-left { gap: 0; }
+  .header-left .header-icon-btn,
+  .header-left .header-menu-group .label { display: none; }
+  .header-menu-group { gap: 0; }
+  .header-menu-group .icon { width: 24px; height: 24px; }
+  .header-center {
+    font-weight: 900; font-size: 14px; line-height: 17px;
+    width: 126px; text-align: left; margin: 0;
+    flex: 0 0 auto;
+  }
+  .header-logo { margin-left: auto; gap: 12.2px; align-items: center; }
+  .header-logo svg {
+    width: 118.3px; height: 34.5px;
+  }
+
+  /* HERO — narrower, smaller type */
+  .hero {
+    padding: 32px 16px 24px;
+  }
+  .hero-bg {
+    background-position: center right;
+    opacity: 0.37;
+    mix-blend-mode: color-dodge;
+  }
+  .hero-bg::after {
+    background: linear-gradient(180deg, rgba(38,38,38,0.85) 0%, rgba(38,38,38,0.7) 60%, rgba(38,38,38,0.55) 100%);
+  }
+  .hero-pin { display: none; }
+  .breadcrumb {
+    top: 6px; left: 16px;
+    font-size: 10px;
+  }
+  .hero-content { max-width: 100%; }
+  .hero-eyebrow {
+    font-size: 16px; line-height: 1; margin-bottom: 4px;
+  }
+  .hero-title {
+    font-weight: 700; font-size: 35px; line-height: 30px;
+    margin-bottom: 12px;
+  }
+  .hero-desc { font-size: 12px; line-height: 1.2; }
+
+  /* TOGGLE BUTTONS (Mapa / Lista completo) */
+  .mobile-toggle {
+    display: flex; gap: 16px;
+    padding: 8px 16px;
+    background: var(--white);
+  }
+  .mobile-toggle-btn {
+    flex: 1; min-width: 0;
+    padding: 6px 12px;
+    font-family: inherit;
+    font-weight: 900; font-size: 16px; line-height: 1;
+    cursor: pointer;
+    border: 1px solid var(--motorrad-blue);
+    background: var(--white); color: var(--motorrad-blue);
+  }
+  .mobile-toggle-btn.active {
+    background: var(--motorrad-blue); color: var(--white);
+  }
+
+  /* MAIN CONTENT — stack everything */
+  .main-content {
+    background: var(--white);
+    padding: 0;
+  }
+  .map-row {
+    flex-direction: column;
+    gap: 0;
+    align-items: center;
+    max-width: 100%;
+  }
+
+  /* MAP — 343 × 415, smaller silhouette positioned per Figma */
+  .map-panel { width: 343px; flex-shrink: 0; }
+  .map-wrapper {
+    width: 343px; height: 415px;
+    border-left-width: 6px;
+  }
+  .map-wrapper svg.colombia-map {
+    left: 23px; top: 12px;
+    width: 284.435px; height: 391px;
+  }
+
+  .map-pin {
+    width: 8px; height: 8px;
+    box-shadow: 0 0 0 2px rgba(0, 98, 255, 0.3);
+  }
+  .map-label {
+    position: absolute;
+    background: var(--motorrad-blue);
+    color: var(--white);
+    font-size: 10px; line-height: 1;
+    padding: 1px 2px 2px;
+    border-radius: 2px;
+    z-index: 4;
+    white-space: nowrap;
+  }
+
+  /* EMPTY STATE — pin + title in a row, helper below (via flex-wrap + widths) */
+  .empty-state {
+    width: 375px; max-width: 100%;
+    height: auto;
+    padding: 8px 12px 24px;
+    gap: 4px 12px;
+    flex-direction: row; flex-wrap: wrap;
+    align-items: center; justify-content: flex-start;
+    text-align: left;
+  }
+  .empty-state .pin-icon {
+    width: 42px; height: 42px;
+    flex-shrink: 0;
+  }
+  .empty-state h2 {
+    font-weight: 900; font-size: 25px; line-height: 25px;
+    flex: 1 1 0; min-width: 0;
+    max-width: none;
+    text-align: left;
+  }
+  .empty-state .helper {
+    flex: 1 0 100%;
+    font-size: 16px; line-height: 1; color: var(--anthracite);
+    text-align: left;
+  }
+
+  /* FOOTER — replace overlapping desktop footer with mobile simple footer */
+  .footer-area {
+    height: auto; margin-top: 0;
+    border-top: 1px solid var(--grey-6);
+    padding: 24px 18px;
+    display: flex; flex-direction: column;
+    gap: 24px; align-items: center;
+  }
+  .footer-area .links-bg,
+  .footer-area .newsletter-box,
+  .footer-area .make-life-row { display: none; }
+  .mobile-footer-copy {
+    display: block;
+    font-size: 10px; line-height: 1; color: var(--anthracite);
+    text-align: center;
+  }
+  .mobile-footer-makelife {
+    display: flex; flex-direction: column; gap: 12px;
+    width: 169px;
+  }
+  .mobile-footer-makelife .text {
+    font-weight: 900; font-size: 13px; line-height: 13px;
+    color: var(--anthracite); letter-spacing: 0.02em;
+    text-transform: uppercase; text-align: center;
+  }
+  .mobile-footer-makelife .underline {
+    height: 3px; background: #000; width: 100%;
+  }
+
+  /* ── SCREEN MOBILE LIST (Lista completa) ── */
+  #screenMobileList {
+    background: var(--white);
+    min-height: 100vh;
+    display: none;
+    flex-direction: column;
+  }
+  #screenMobileList.active {
+    display: flex;
+  }
+
+  /* Back bar — grey strip with ← Mapa */
+  .ml-back-bar {
+    background: #F4F4F4;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+  }
+  .ml-back-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: none; border: none; cursor: pointer;
+    font-family: inherit;
+    font-size: 14px; font-weight: 600;
+    color: var(--anthracite);
+    padding: 0;
+  }
+  .ml-back-btn svg { flex-shrink: 0; }
+
+  /* Dept name + hotel count badge */
+  .ml-dept-header {
+    background: var(--white);
+    padding: 20px 16px 12px;
+    border-bottom: 1px solid #E0E0E0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .ml-dept-name {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--anthracite);
+    letter-spacing: 0;
+  }
+  .ml-hotel-badge {
+    background: var(--motorrad-blue);
+    color: var(--white);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+
+  /* Cards area — full width, stacked */
+  .ml-cards {
+    flex: 1;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /* Volver arriba button */
+  .ml-volver-wrap {
+    display: flex;
+    justify-content: center;
+    padding: 20px 16px;
+  }
+}
