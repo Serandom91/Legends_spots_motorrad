@@ -534,6 +534,22 @@ body { font-family: "BMWMotorrad", "Helvetica Neue", -apple-system, BlinkMacSyst
     background: var(--motorrad-blue); color: var(--white);
   }
 
+  /* DEPT HEADER — mobile (Figma 690-1456) */
+  .s2-dept-header {
+    align-items: center;
+    padding: 12px 16px 8px;
+    border-bottom: none;
+  }
+  .s2-dept-name {
+    font-size: 20px;
+    line-height: 22px;
+  }
+
+  /* HOTEL CARDS — 16px side margins so cards are 343px wide (Figma 656-1345) */
+  .hotel-cards {
+    padding: 0 16px;
+  }
+
   /* HOTEL CARD CTAs — mobile layout (Figma 656-1346) */
   .hotel-card-cta {
     flex-direction: column;
