@@ -639,7 +639,7 @@ function buildCardsHTML(dept) {
         </div>
         <div class="hotel-card-cta">
           <div class="btns">
-            <button class="btn-outline btn-ver-mas" type="button">Ver más</button>
+            <a href="hotel-detail.html" class="btn-outline">Ver más</a>
             <button class="btn-primary" type="button">
               Ir a reservas
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
@@ -706,27 +706,7 @@ function filterChip(el, filter) {
 document.addEventListener('DOMContentLoaded', () => {
   // Init all maps
   document.querySelectorAll('svg.colombia-map').forEach(svg => initMap(svg));
-  // Delegated click for hotel cards — screen 2 (only "Ver más" button)
-  document.getElementById('hotelCards').addEventListener('click', function(e) {
-    const btn = e.target.closest('.btn-ver-mas');
-    if (!btn) return;
-    const card = btn.closest('.hotel-card');
-    if (!card) return;
-    const dept = card.getAttribute('data-hotel-dept');
-    const idx = parseInt(card.getAttribute('data-hotel-idx'));
-    openHotel(dept, idx);
-  });
-
-  // Delegated click for hotel cards — mobile list screen (only "Ver más" button)
-  document.getElementById('mlHotelCards').addEventListener('click', function(e) {
-    const btn = e.target.closest('.btn-ver-mas');
-    if (!btn) return;
-    const card = btn.closest('.hotel-card');
-    if (!card) return;
-    const dept = card.getAttribute('data-hotel-dept');
-    const idx = parseInt(card.getAttribute('data-hotel-idx'));
-    openHotel(dept, idx);
-  });
+  // "Ver más" links navigate directly to hotel-detail.html — no click listener needed.
   showScreen(1);
 });
 </script>
