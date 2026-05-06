@@ -630,6 +630,8 @@ body { font-family: "BMWMotorrad", "Helvetica Neue", -apple-system, BlinkMacSyst
 
   /* Reset sticky map on mobile — natural document flow */
   #screen2 .map-panel { position: static; }
+  /* Override the desktop flex-start alignment so the map stays centered on mobile */
+  #screen2 .map-row { align-items: center; }
   .s2-content { max-height: none; overflow-y: visible; padding-bottom: 0; }
 
   /* MAP — 343 × 415, smaller silhouette positioned per Figma */
