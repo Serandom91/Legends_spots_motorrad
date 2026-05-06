@@ -122,7 +122,7 @@
           <span class="map-pin desktop-only" style="left:306px; top:283px;" title="Salento"></span>
           <span class="map-pin desktop-only" style="left:231px; top:242px;" title="Salento"></span>
           <span class="map-pin desktop-only" style="left:235px; top:294px;" title="Manizales"></span>
-          <span class="map-tooltip desktop-only" style="left:320px; top:278px;">Boyacá</span>
+          <span class="map-tooltip" id="mapTooltip1" style="display:none"></span>
 
           <!-- Mobile-only pins / labels (positions match Figma node 656:283) -->
           <span class="map-pin mobile-only" style="left:96px; top:197px;" title="San Gil"></span>
@@ -290,8 +290,8 @@
 </defs>
 
 </svg>
-          <!-- Antioquia label overlay (highlighted dept) -->
-          <span class="map-tooltip s2-antioquia-label" style="left:205px; top:215px;">Antioquia</span>
+          <!-- Dynamic hover tooltip -->
+          <span class="map-tooltip" id="mapTooltip2" style="display:none"></span>
           <!-- Same pins as screen 1 -->
           <span class="map-pin" style="left:225px; top:325px;"></span>
           <span class="map-pin" style="left:199px; top:348px;"></span>
@@ -566,6 +566,9 @@ function goBack() {
 const AVAILABLE_DEPTS = ["Antioquia", "Boyacá", "Caldas", "Quindío", "Valle del Cauca"];
 
 function initMap(svgEl) {
+  const wrapper = svgEl.closest('.map-wrapper');
+  const tooltip = wrapper ? wrapper.querySelector('.map-tooltip') : null;
+
   svgEl.querySelectorAll('.dept-path').forEach(path => {
     const dept = path.getAttribute('data-dept');
     if (AVAILABLE_DEPTS.includes(dept)) {
@@ -573,6 +576,22 @@ function initMap(svgEl) {
       path.addEventListener('click', function() {
         selectDepartment(dept, this);
       });
+
+      if (tooltip) {
+        path.addEventListener('mousemove', function(e) {
+          const rect = wrapper.getBoundingClientRect();
+          const left = e.clientX - rect.left;
+          const top  = e.clientY - rect.top - 36;
+          tooltip.textContent = dept;
+          tooltip.style.left      = left + 'px';
+          tooltip.style.top       = top  + 'px';
+          tooltip.style.transform = 'translateX(-50%)';
+          tooltip.style.display   = '';
+        });
+        path.addEventListener('mouseleave', function() {
+          tooltip.style.display = 'none';
+        });
+      }
     }
   });
 }
@@ -620,7 +639,7 @@ function buildCardsHTML(dept) {
         </div>
         <div class="hotel-card-cta">
           <div class="btns">
-            <a href="hotel-detail.html" class="btn-outline">Ver más</a>
+            <button class="btn-outline btn-ver-mas" type="button">Ver más</button>
             <button class="btn-primary" type="button">
               Ir a reservas
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
@@ -666,10 +685,8 @@ function openHotel(dept, idx) {
   document.getElementById('s3Desc').textContent = hotel.desc;
   document.getElementById('s3Location').textContent = hotel.location;
 
-  // Hero: pick desktop or mobile image based on viewport
-  const isDesktop = window.matchMedia('(min-width: 768px)').matches;
-  const heroSrc = isDesktop ? 'images/hero_image_desktop.png' : 'images/hero-image-mobile.png';
-  document.getElementById('s3HeroImg').src = heroSrc;
+  // Hero: use the hotel's main card image
+  document.getElementById('s3HeroImg').src = hotel.img || 'images/Gallery/Image.jpg';
 
   // Gallery
   const gallery = hotel.gallery || ['images/Gallery/Image.jpg','images/Gallery/Image-1.jpg','images/Gallery/Image-2.jpg','images/Gallery/Image-3.jpg'];
@@ -689,18 +706,22 @@ function filterChip(el, filter) {
 document.addEventListener('DOMContentLoaded', () => {
   // Init all maps
   document.querySelectorAll('svg.colombia-map').forEach(svg => initMap(svg));
-  // Delegated click for hotel cards — screen 2
+  // Delegated click for hotel cards — screen 2 (only "Ver más" button)
   document.getElementById('hotelCards').addEventListener('click', function(e) {
-    const card = e.target.closest('.hotel-card');
+    const btn = e.target.closest('.btn-ver-mas');
+    if (!btn) return;
+    const card = btn.closest('.hotel-card');
     if (!card) return;
     const dept = card.getAttribute('data-hotel-dept');
     const idx = parseInt(card.getAttribute('data-hotel-idx'));
     openHotel(dept, idx);
   });
 
-  // Delegated click for hotel cards — mobile list screen
+  // Delegated click for hotel cards — mobile list screen (only "Ver más" button)
   document.getElementById('mlHotelCards').addEventListener('click', function(e) {
-    const card = e.target.closest('.hotel-card');
+    const btn = e.target.closest('.btn-ver-mas');
+    if (!btn) return;
+    const card = btn.closest('.hotel-card');
     if (!card) return;
     const dept = card.getAttribute('data-hotel-dept');
     const idx = parseInt(card.getAttribute('data-hotel-idx'));
